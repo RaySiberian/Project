@@ -2,23 +2,12 @@ using UnityEngine;
 
 public class TerrainSpawn : MonoBehaviour
 {
-    public float meshHeightMultiplier;
-    public AnimationCurve meshHeightCurve;
+    public NoiseData noiseData;
+    public TerrainData terrainData;
+
     public Material material;
 
     [Range(0, 6)] public int levelOfDetail;
-    public float noiseScale;
-
-    public int octaves;
-    [Range(0, 1)] public float persistance;
-    public float lacunarity;
-
-    public int seed;
-    public Vector2 offset;
-
-    public bool useFalloff;
-
-    public TerrainType[] regions;
 
     private int mapChunkSize = 241;
     private GameObject meshGameObject;
@@ -40,9 +29,10 @@ public class TerrainSpawn : MonoBehaviour
         meshFilter = meshGameObject.AddComponent<MeshFilter>();
         MapData mapData = GenerateMapData();
         DrawMesh(
-            MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail));
+            MeshGenerator.GenerateTerrainMesh(mapData.heightMap, terrainData.meshHeightMultiplier,
+                terrainData.meshHeightCurve, levelOfDetail));
         meshCollider = meshGameObject.AddComponent<MeshCollider>();
-        meshGameObject.transform.localScale = new Vector3(5, 5, 5);
+        meshGameObject.transform.localScale = new Vector3(5, 1, 5);
     }
 
     private void DrawMesh(MeshData meshData)
@@ -53,14 +43,15 @@ public class TerrainSpawn : MonoBehaviour
 
     public MapData GenerateMapData()
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed, noiseScale, octaves, persistance,
-            lacunarity, offset);
-        
+        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, noiseData.seed, noiseData.noiseScale,
+            noiseData.octaves, noiseData.persistance,
+            noiseData.lacunarity, noiseData.offset);
+
         for (int y = 0; y < mapChunkSize; y++)
         {
             for (int x = 0; x < mapChunkSize; x++)
             {
-                if (useFalloff)
+                if (terrainData.useFalloff)
                 {
                     noiseMap[x, y] = Mathf.Clamp01(noiseMap[x, y] - falloffMap[x, y]);
                 }
@@ -68,13 +59,5 @@ public class TerrainSpawn : MonoBehaviour
         }
 
         return new MapData(noiseMap);
-    }
-
-    [System.Serializable]
-    public struct TerrainType
-    {
-        public string name;
-        public float height;
-        public Color colour;
     }
 }
