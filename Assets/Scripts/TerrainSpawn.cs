@@ -42,6 +42,7 @@ public class TerrainSpawn : MonoBehaviour
         DrawMesh(
             MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail));
         meshCollider = meshGameObject.AddComponent<MeshCollider>();
+        meshGameObject.transform.localScale = new Vector3(5, 5, 5);
     }
 
     private void DrawMesh(MeshData meshData)
