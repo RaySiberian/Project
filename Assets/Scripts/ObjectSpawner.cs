@@ -24,58 +24,22 @@ public class ObjectSpawner : MonoBehaviour
         {
             SpawnObjects();
         }
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            SpawnGrass();
-        }
     }
 
     private void SpawnObjects()
     {
-        for (int x = 0; x < 1200; x++)
-        {
-            for (int z = 0; z < 1200; z++)
-            {
-                float xCoord = (float)(x + seed) / 1200 * objectNoiseScale;
-                float yCoord = (float)(z + seed) / 1200 * objectNoiseScale;
-                float noise = Mathf.PerlinNoise(xCoord, yCoord);
-                if (noise >= 0.9)
-                {
-                    Ray ray = new Ray();
-                    ray.origin = new Vector3(x, 50, z);
-                    ray.direction = Vector3.down * raycastDistance;
-                    RaycastHit hit;
-
-                    if (Physics.Raycast(ray, out hit))
-                    {
-                        foreach (var area in objectSpawnAreas)
-                        {
-                            if (hit.point.y >= area.minY && hit.point.y <= area.maxY)
-                            {
-                                int prefabID = Random.Range(0, area.prefabs.Length);
-                                GameObject go = area.prefabs[prefabID];
-                                go.transform.localScale = new Vector3(3, 3, 3);
-                                float rotate = Random.Range(0, 180);
-                                Instantiate(go, new Vector3(x, hit.point.y, z),
-                                    Quaternion.FromToRotation (transform.up, hit.normal) * transform.rotation);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        TerrainSpawn.TerrainSpawned -= SpawnObjects;
+        Spawn(objectSpawnAreas,objectNoiseScale);
+        //Spawn(grassSpawnAreas,grassNoiseScale);
     }
-    
-    private void SpawnGrass()
+
+    private void Spawn(ObjectSpawnArea[] objectSpawnArea, float noiseScale)
     {
         for (int x = 0; x < 1200; x++)
         {
             for (int z = 0; z < 1200; z++)
             {
-                float xCoord = (float)(x + seed) / 1200 * grassNoiseScale;
-                float yCoord = (float)(z + seed) / 1200 * grassNoiseScale;
+                float xCoord = (float)(x + seed) / 1200 * noiseScale;
+                float yCoord = (float)(z + seed) / 1200 * noiseScale;
                 float noise = Mathf.PerlinNoise(xCoord, yCoord);
                 if (noise >= 0.85)
                 {
@@ -86,14 +50,15 @@ public class ObjectSpawner : MonoBehaviour
 
                     if (Physics.Raycast(ray, out hit))
                     {
-                        foreach (var area in grassSpawnAreas)
+                        foreach (var area in objectSpawnArea)
                         {
                             if (hit.point.y >= area.minY && hit.point.y <= area.maxY)
                             {
                                 int prefabID = Random.Range(0, area.prefabs.Length);
+                                
                                 GameObject go = area.prefabs[prefabID];
                                 go.transform.localScale = new Vector3(3, 3, 3);
-                                float rotate = Random.Range(0, 180);
+                                
                                 Instantiate(go, new Vector3(x, hit.point.y, z),
                                     Quaternion.FromToRotation (transform.up, hit.normal) * transform.rotation);
                             }
@@ -102,9 +67,8 @@ public class ObjectSpawner : MonoBehaviour
                 }
             }
         }
-
-        TerrainSpawn.TerrainSpawned -= SpawnGrass;
     }
+    
 }
 
 [System.Serializable]
