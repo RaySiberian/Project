@@ -12,6 +12,7 @@ public class ObjectSpawner : MonoBehaviour
 
     public ObjectSpawnArea[] objectSpawnAreas = new ObjectSpawnArea[] { };
     public ObjectSpawnArea[] grassSpawnAreas = new ObjectSpawnArea[] { };
+   
     private void OnEnable()
     {
         //TerrainSpawn.TerrainSpawned += SpawnObjects;
@@ -28,11 +29,11 @@ public class ObjectSpawner : MonoBehaviour
 
     private void SpawnObjects()
     {
-        Spawn(objectSpawnAreas,objectNoiseScale,0.9f);
+        Spawn(objectSpawnAreas,objectNoiseScale,0.9f, new Vector3(3,3,3));
         //Spawn(grassSpawnAreas,grassNoiseScale);
     }
 
-    private void Spawn(ObjectSpawnArea[] objectSpawnArea, float noiseScale, float intensity)
+    private void Spawn(ObjectSpawnArea[] objectSpawnArea, float noiseScale, float intensity, Vector3 localScale)
     {
         for (int x = 0; x < 1200; x++)
         {
@@ -54,7 +55,7 @@ public class ObjectSpawner : MonoBehaviour
                                 int prefabID = Random.Range(0, area.prefabs.Length);
                                 
                                 GameObject go = area.prefabs[prefabID];
-                                go.transform.localScale = new Vector3(3, 3, 3);
+                                go.transform.localScale = localScale;
                                 
                                 Instantiate(go, new Vector3(x, hit.point.y, z),
                                     Quaternion.FromToRotation (transform.up, hit.normal) * transform.rotation);
