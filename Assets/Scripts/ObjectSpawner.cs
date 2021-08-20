@@ -28,11 +28,11 @@ public class ObjectSpawner : MonoBehaviour
 
     private void SpawnObjects()
     {
-        Spawn(objectSpawnAreas,objectNoiseScale);
+        Spawn(objectSpawnAreas,objectNoiseScale,0.9f);
         //Spawn(grassSpawnAreas,grassNoiseScale);
     }
 
-    private void Spawn(ObjectSpawnArea[] objectSpawnArea, float noiseScale)
+    private void Spawn(ObjectSpawnArea[] objectSpawnArea, float noiseScale, float intensity)
     {
         for (int x = 0; x < 1200; x++)
         {
@@ -41,14 +41,11 @@ public class ObjectSpawner : MonoBehaviour
                 float xCoord = (float)(x + seed) / 1200 * noiseScale;
                 float yCoord = (float)(z + seed) / 1200 * noiseScale;
                 float noise = Mathf.PerlinNoise(xCoord, yCoord);
-                if (noise >= 0.85)
+                if (noise >= intensity)
                 {
-                    Ray ray = new Ray();
-                    ray.origin = new Vector3(x, 50, z);
-                    ray.direction = Vector3.down * raycastDistance;
-                    RaycastHit hit;
-
-                    if (Physics.Raycast(ray, out hit))
+                    Ray ray = new Ray(new Vector3(x, 50, z),Vector3.down * raycastDistance);
+                    
+                    if (Physics.Raycast(ray, out RaycastHit hit))
                     {
                         foreach (var area in objectSpawnArea)
                         {
