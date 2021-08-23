@@ -2,16 +2,20 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DisplayInventory : MonoBehaviour
 {
-    public InventoryObject inventoryToDisplay;
-    public int xStart;
-    public int yStart;
-    public int xSpaceBetweenItems;
-    public int ySpaceBetweenItems;
-    public int numberOfColumn;
+    public InventoryObject inventory;
+    [SerializeField] private int X_START;
+    [SerializeField] private int Y_START;
+    
+    [SerializeField] private int X_SPACE_BETWEEN_ITEM;
+    [SerializeField] private int NUMBER_OF_COLUMN;
+    [SerializeField] private int Y_SPACE_BETWEEN_ITEMS;
 
+    [SerializeField] private GameObject inventoryPrefab;
+    
     private Dictionary<InventorySlot, GameObject> itemsDisplayed = new Dictionary<InventorySlot, GameObject>();
 
     private void Start()
@@ -26,39 +30,55 @@ public class DisplayInventory : MonoBehaviour
 
     private void UpdateDisplay()
     {
-        for (int i = 0; i < inventoryToDisplay.Container.Count; i++)
+        for (int i = 0; i < inventory.container.items.Count; i++)
         {
-            if (itemsDisplayed.ContainsKey(inventoryToDisplay.Container[i]))
+            InventorySlot slot = inventory.container.items[i];
+            if (itemsDisplayed.ContainsKey(slot))
             {
-                itemsDisplayed[inventoryToDisplay.Container[i]].GetComponentInChildren<TextMeshProUGUI>().text =
-                    inventoryToDisplay.Container[i].amount.ToString("n0");
+                itemsDisplayed[slot].GetComponentInChildren<TextMeshProUGUI>().text =
+                    slot.amount.ToString();
             }
             else
             {
-                var obj = Instantiate(inventoryToDisplay.Container[i].item.prefab, Vector3.zero, Quaternion.identity,
-                    transform);
+                var obj = Instantiate(inventoryPrefab,Vector3.zero, Quaternion.identity, transform);
+                obj.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventory.dataBase.GetItem[slot.item.Id].sprite;
                 obj.GetComponent<RectTransform>().localPosition = GetPosition(i);
-                obj.GetComponentInChildren<TextMeshProUGUI>().text = inventoryToDisplay.Container[i].amount.ToString("n0");
-                itemsDisplayed.Add(inventoryToDisplay.Container[i],obj);
+                obj.GetComponentInChildren<TextMeshProUGUI>().text = slot.amount.ToString("n0");
+                itemsDisplayed.Add(slot,obj);
             }
         }
     }
-
+    
+    //TODO дублирование кода
     private void CreateDisplay()
     {
-        for (int i = 0; i < inventoryToDisplay.Container.Count; i++)
+        for (int i = 0; i < inventory.container.items.Count; i++)
         {
-            var obj = Instantiate(inventoryToDisplay.Container[i].item.prefab, Vector3.zero, Quaternion.identity,
-                transform);
+            InventorySlot slot = inventory.container.items[i];
+            var obj = Instantiate(inventoryPrefab,Vector3.zero, Quaternion.identity, transform);
+            obj.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventory.dataBase.GetItem[slot.item.Id].sprite;
             obj.GetComponent<RectTransform>().localPosition = GetPosition(i);
-            obj.GetComponentInChildren<TextMeshProUGUI>().text = inventoryToDisplay.Container[i].amount.ToString("n0");
-            
-            itemsDisplayed.Add(inventoryToDisplay.Container[i],obj);
+            obj.GetComponentInChildren<TextMeshProUGUI>().text = slot.amount.ToString("n0");
+            itemsDisplayed.Add(slot,obj);
         }
     }
-
+    
     private Vector3 GetPosition(int i)
     {
-        return new Vector3(xStart + (xSpaceBetweenItems*(i % numberOfColumn)), yStart + (-ySpaceBetweenItems * (i/numberOfColumn)),0f);
+        return new Vector3( X_START + (X_SPACE_BETWEEN_ITEM * (i % NUMBER_OF_COLUMN)),
+            (Y_START + ( -Y_SPACE_BETWEEN_ITEMS * (i / NUMBER_OF_COLUMN))), 0f);
     }
+    
+    
+    private void OnEnable()
+    {
+        
+    }
+    
+    private void OnDisable()
+    {
+        
+    }
+    
+   
 }
