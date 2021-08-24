@@ -1,23 +1,41 @@
-using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-   public MouseItem mouseItem = new MouseItem();
    public InventoryObject Inventory;
+   public InventoryObject Equipment;
+
+   private void Update()
+   {
+      if (Input.GetKeyDown(KeyCode.L))
+      {
+         Inventory.Load();
+         Equipment.Load();
+      }
+      if (Input.GetKeyDown(KeyCode.K))
+      {
+         Inventory.Save();
+         Equipment.Save();
+      }
+   }
 
    private void OnTriggerEnter(Collider other)
    {
       var item = other.GetComponent<GroundItem>();
       if (item)
       {
-         Inventory.AddItem(new Item(item.item),1);
+         Item _item = new Item(item.item);
+         if (Inventory.AddItem(_item,1))
+         {
+            Destroy(other.gameObject);
+         }
       }
 
    }
 
    private void OnApplicationQuit()
    {
-      Inventory.Container.Items = new InventorySlot[56];
+      Inventory.Container.Clear();
+      Equipment.Container.Clear();
    }
 }
