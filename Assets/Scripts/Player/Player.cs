@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -12,5 +13,10 @@ public class Player : MonoBehaviour
          Inventory.AddItem(new Item(item.item),1);
       }
 
+   }
+
+   private void OnApplicationQuit()
+   {
+      Inventory.container.items = new InventorySlot[56];
    }
 }

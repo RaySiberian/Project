@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class MouseLook : MonoBehaviour
@@ -10,7 +9,8 @@ public class MouseLook : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        //TODO Сделать обработку появления мыши 
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
