@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -59,7 +58,7 @@ public class DisplayInventory : MonoBehaviour
     private void CreateSlots()
     {
         itemsDisplayed = new Dictionary<GameObject, InventorySlot>();
-        for (int i = 0; i < inventory.container.items.Length; i++)
+        for (int i = 0; i < inventory.Container.Items.Length; i++)
         {
             var obj = Instantiate(inventoryPrefab, Vector3.zero, Quaternion.identity, transform);
             obj.GetComponent<RectTransform>().localPosition = GetPosition(i);
@@ -70,7 +69,7 @@ public class DisplayInventory : MonoBehaviour
             AddEvent(obj, EventTriggerType.EndDrag, delegate{OnDragEnd(obj);});
             AddEvent(obj, EventTriggerType.Drag, delegate{OnDrag(obj);});
             
-            itemsDisplayed.Add(obj, inventory.container.items[i]);
+            itemsDisplayed.Add(obj, inventory.Container.Items[i]);
         }
     }
 
@@ -153,12 +152,4 @@ public class DisplayInventory : MonoBehaviour
     private void OnDisable()
     {
     }
-}
-
-public class MouseItem
-{
-    public GameObject obj;
-    public GameObject hoverObj;
-    public InventorySlot item;
-    public InventorySlot hoverItem;
 }

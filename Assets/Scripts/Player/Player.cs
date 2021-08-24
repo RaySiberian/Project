@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+   public MouseItem mouseItem = new MouseItem();
    public InventoryObject Inventory;
 
    private void OnTriggerEnter(Collider other)
@@ -17,6 +18,6 @@ public class Player : MonoBehaviour
 
    private void OnApplicationQuit()
    {
-      Inventory.container.items = new InventorySlot[56];
+      Inventory.Container.Items = new InventorySlot[56];
    }
 }

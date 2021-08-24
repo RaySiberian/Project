@@ -5,7 +5,11 @@ using Random = UnityEngine.Random;
 public enum ItemType
 {
     Food,
-    Equipment,
+    Helmet,
+    Weapon,
+    Shield,
+    Boots,
+    Chest,
     Default 
 }
 
@@ -38,7 +42,13 @@ public class Item
     public string Name;
     public int Id;
     public ItemBuff[] buffs;
-        
+
+    public Item()
+    {
+        Name = "";
+        Id = -1;
+    }
+    
     public Item(ItemObject item)
     {
         Name = item.name;
