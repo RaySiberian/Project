@@ -14,9 +14,10 @@ public abstract class UserInterface : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < inventory.Container.Items.Length; i++)
+        for (int i = 0; i < inventory.GetSlots.Length; i++)
         {
-            inventory.Container.Items[i].parent = this;
+            inventory.GetSlots[i].parent = this;
+            inventory.GetSlots[i].OnAfterUpdate += OnSlotUpdate;
         }
 
         CreateSlots();
@@ -24,11 +25,23 @@ public abstract class UserInterface : MonoBehaviour
         AddEvent(gameObject, EventTriggerType.PointerExit, delegate { OnExitInterface(gameObject); });
     }
 
-    private void Update()
+    private void OnSlotUpdate(InventorySlot slot)
     {
-        //TODO Это не должно быть не каждый кадр
-        slotsOnInterface.UpdateSlotDisplay();
+        if (slot.item.Id >= 0)
+        {
+            slot.slotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().sprite = slot.ItemObject.sprite;
+            slot.slotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1);
+            slot.slotDisplay.GetComponentInChildren<TextMeshProUGUI>().text =
+                slot.amount == 1 ? "" : slot.amount.ToString("n0");
+        }
+        else
+        {
+            slot.slotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().sprite = null;
+            slot.slotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0);
+            slot.slotDisplay.GetComponentInChildren<TextMeshProUGUI>().text = "";
+        }
     }
+    
     
     public void AddEvent(GameObject obj, EventTriggerType type, UnityAction<BaseEventData> action)
     {
