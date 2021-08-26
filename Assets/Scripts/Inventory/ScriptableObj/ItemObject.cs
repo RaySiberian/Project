@@ -28,6 +28,8 @@ public abstract class ItemObject : ScriptableObject
     public bool stackable;
     public ItemType type;
     public Item data = new Item();
+    //TODO переименовать на что-то вменяемое
+    public GameObject characterDisplay;
     
     public Item CreateItem()
     {
