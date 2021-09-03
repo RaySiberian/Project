@@ -42,7 +42,7 @@ public class Container : MonoBehaviour
             CraftItem();
         }
     }
-    
+
     public void AddItemInInventory(ItemObject itemObject)
     {
         if (itemObject.StackAble)
@@ -61,6 +61,25 @@ public class Container : MonoBehaviour
         ContainerUpdated?.Invoke();
     }
     
+    public void AddItemInInventory(Item item)
+    {
+        ItemObject temp = FindObjectInDatabase(item);
+        if (temp.StackAble)
+        {
+            //Цикл заглушка, чтоб предмет добовлялся по одному
+            for (int i = 0; i < item.Amount; i++)
+            {
+                AddStackableAmount(temp);
+            }
+        }
+        else
+        {
+            AddUnStackableAmount(temp);
+        }
+
+        ContainerUpdated?.Invoke();
+    }
+
     public void SplitOneItem(Item fromSlot, Item toSlot, ContainerType containerType)
     {
         if (fromSlot.Amount == 1)

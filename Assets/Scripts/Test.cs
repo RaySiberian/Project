@@ -1,20 +1,24 @@
+using System;
 using UnityEngine;
 
-public class WorldItem : MonoBehaviour
+public class Test : MonoBehaviour
 {
-    [SerializeField]private ItemObject worldItemObject;
-    public int ItemId;
     public int Amount;
-    public string Name;
-    
+
     public int AmountMultiplayerByDurability;
     public int Durability = 5;
-
+    private int tes;
     private void Start()
     {
-        ItemId = worldItemObject.Data.ID;
-        Name = worldItemObject.Data.Name;
         Amount = Durability * AmountMultiplayerByDurability;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log(tes = GiveResources());
+        }
     }
 
     public int GiveResources()
