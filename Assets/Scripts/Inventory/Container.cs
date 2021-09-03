@@ -457,7 +457,14 @@ public class Container : MonoBehaviour
                     return;
                 }
 
-                Debug.Log("123");
+                if (fromSlot.Amount == 1)
+                {
+                    CraftStorage[FindItemArrayPositionCraft(toSlot)] = new Item(FindObjectInDatabase(fromSlot));
+                    Inventory[FindItemArrayPositionInventory(fromSlot)] = new Item();
+                    ContainerUpdated?.Invoke();
+                    return;
+                }
+                
                 Inventory[FindItemArrayPositionInventory(fromSlot)].Amount -= 1;
                 CraftStorage[FindItemArrayPositionCraft(toSlot)] = new Item(FindObjectInDatabase(fromSlot));
             }
@@ -470,7 +477,15 @@ public class Container : MonoBehaviour
                 {
                     return;
                 }
-
+                
+                if (fromSlot.Amount == 1)
+                {
+                    Inventory[FindItemArrayPositionInventory(toSlot)] = new Item(FindObjectInDatabase(fromSlot));
+                    CraftStorage[FindItemArrayPositionCraft(fromSlot)] = new Item();
+                    ContainerUpdated?.Invoke();
+                    return;
+                }
+                
                 CraftStorage[FindItemArrayPositionCraft(fromSlot)].Amount -= 1;
                 Inventory[FindItemArrayPositionInventory(toSlot)] = new Item(FindObjectInDatabase(fromSlot));
             }
@@ -499,7 +514,7 @@ public class Container : MonoBehaviour
 
         if (toSlot.Amount == FindObjectInDatabase(toSlot).MaxStuckSize)
         {
-            return false;
+            return true;
         }
 
         if (isItemInInventory)
