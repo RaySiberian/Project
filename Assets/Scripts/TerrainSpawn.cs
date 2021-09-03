@@ -26,6 +26,7 @@ public class TerrainSpawn : MonoBehaviour
     private void Start()
     {
         meshGameObject = new GameObject("Terrain");
+        meshGameObject.layer = LayerMask.NameToLayer("Obsticle");
         Instantiate(meshGameObject);
         meshRenderer = meshGameObject.AddComponent<MeshRenderer>();
         meshFilter = meshGameObject.AddComponent<MeshFilter>();

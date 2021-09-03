@@ -16,7 +16,7 @@ public abstract class UserInterface : MonoBehaviour
     {
         for (int i = 0; i < inventory.GetSlots.Length; i++)
         {
-            inventory.GetSlots[i].parent = this;
+            inventory.GetSlots[i].Parent = this;
             inventory.GetSlots[i].OnAfterUpdate += OnSlotUpdate;
         }
 
@@ -27,18 +27,18 @@ public abstract class UserInterface : MonoBehaviour
 
     private void OnSlotUpdate(InventorySlot slot)
     {
-        if (slot.item.Id >= 0)
+        if (slot.Item.Id >= 0)
         {
-            slot.slotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().sprite = slot.ItemObject.sprite;
-            slot.slotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1);
-            slot.slotDisplay.GetComponentInChildren<TextMeshProUGUI>().text =
-                slot.amount == 1 ? "" : slot.amount.ToString("n0");
+            slot.SlotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().sprite = slot.ItemObject.sprite;
+            slot.SlotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1);
+            slot.SlotDisplay.GetComponentInChildren<TextMeshProUGUI>().text =
+                slot.Amount == 1 ? "" : slot.Amount.ToString("n0");
         }
         else
         {
-            slot.slotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().sprite = null;
-            slot.slotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0);
-            slot.slotDisplay.GetComponentInChildren<TextMeshProUGUI>().text = "";
+            slot.SlotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().sprite = null;
+            slot.SlotDisplay.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0);
+            slot.SlotDisplay.GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
     }
     
@@ -56,7 +56,7 @@ public abstract class UserInterface : MonoBehaviour
     {
         GameObject tempItem = null;
 
-        if (slotsOnInterface[obj].item.Id >= 0)
+        if (slotsOnInterface[obj].Item.Id >= 0)
         {
             tempItem = new GameObject();
             var rt = tempItem.AddComponent<RectTransform>();
@@ -118,29 +118,6 @@ public abstract class UserInterface : MonoBehaviour
         if (MouseData.tempItemBeingDragged != null)
         {
             MouseData.tempItemBeingDragged.GetComponent<RectTransform>().position = Input.mousePosition;
-        }
-    }
-}
-
-public static class ExtensionMethods
-{
-    public static void UpdateSlotDisplay(this Dictionary<GameObject, InventorySlot> _slotsOnInterface)
-    {
-        foreach (KeyValuePair<GameObject, InventorySlot> slot in _slotsOnInterface)
-        {
-            if (slot.Value.item.Id >= 0)
-            {
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = slot.Value.ItemObject.sprite;
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 1);
-                slot.Key.GetComponentInChildren<TextMeshProUGUI>().text =
-                    slot.Value.amount == 1 ? "" : slot.Value.amount.ToString("n0");
-            }
-            else
-            {
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().sprite = null;
-                slot.Key.transform.GetChild(0).GetComponentInChildren<Image>().color = new Color(1, 1, 1, 0);
-                slot.Key.GetComponentInChildren<TextMeshProUGUI>().text = "";
-            }
         }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DynamicInterface : UserInterface
+public class InventoryInterface : UserInterface
 {
     public int xStart;
     public int yStart;
@@ -26,7 +26,7 @@ public class DynamicInterface : UserInterface
             AddEvent(obj, EventTriggerType.EndDrag, delegate { OnDragEnd(obj); });
             AddEvent(obj, EventTriggerType.Drag, delegate { OnDrag(obj); });
 
-            inventory.GetSlots[i].slotDisplay = obj;
+            inventory.GetSlots[i].SlotDisplay = obj;
             
             slotsOnInterface.Add(obj, inventory.GetSlots[i]);
         }

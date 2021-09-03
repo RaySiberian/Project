@@ -30,7 +30,7 @@ public class ObjectSpawner : MonoBehaviour
     private void SpawnObjects()
     {
         Spawn(objectSpawnAreas,objectNoiseScale,0.9f, new Vector3(3,3,3));
-        //Spawn(grassSpawnAreas,grassNoiseScale);
+        Spawn(grassSpawnAreas,grassNoiseScale,0.95f, new Vector3(1,1,1));
     }
 
     private void Spawn(ObjectSpawnArea[] objectSpawnArea, float noiseScale, float intensity, Vector3 localScale)

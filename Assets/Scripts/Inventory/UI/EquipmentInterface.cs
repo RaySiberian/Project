@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class StaticInterface : UserInterface
+public class EquipmentInterface : UserInterface
 {
     public GameObject[] slots;
     
@@ -19,7 +19,7 @@ public class StaticInterface : UserInterface
             AddEvent(obj, EventTriggerType.EndDrag, delegate { OnDragEnd(obj); });
             AddEvent(obj, EventTriggerType.Drag, delegate { OnDrag(obj); });
             
-            inventory.GetSlots[i].slotDisplay = obj;
+            inventory.GetSlots[i].SlotDisplay = obj;
             
             slotsOnInterface.Add(obj, inventory.GetSlots[i]);
         }
