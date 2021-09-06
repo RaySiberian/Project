@@ -1,5 +1,6 @@
 public abstract class EquipmentObject :ItemObject
 {
+    public Buff Buff;
     public EquipmentType EquipmentType;
     protected override void Awake()
     {
@@ -7,6 +8,11 @@ public abstract class EquipmentObject :ItemObject
         Type = ItemObjectType.Equipment;
         StackAble = false;
         MaxStuckSize = -1;
+        
+        Buff.AttackBonus = 0;
+        Buff.AttackRangeBonus = 0;
+        Buff.MineMultiplyBonus = 0;
+        Buff.MineRangeBonus = 0;
     }
 }
 

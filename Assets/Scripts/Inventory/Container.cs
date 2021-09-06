@@ -19,7 +19,7 @@ public class Container : MonoBehaviour
 
     public Item[] CraftStorage = new Item[9];
     public event Action ContainerUpdated;
-
+    public event Action EquipmentUpdated;
     public int FreeSlots
     {
         get { return Inventory.Count(t => t.ID == -1); }
@@ -30,6 +30,8 @@ public class Container : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F1))
         {
             AddItemInInventory(test1);
+            AddItemInInventory(test);
+            AddItemInInventory(test3);
         }
 
         if (Input.GetKeyDown(KeyCode.F2))
@@ -361,7 +363,7 @@ public class Container : MonoBehaviour
         return Inventory.FirstOrDefault(item => item.ID == itemObject.Data.ID);
     }
 
-    private ItemObject FindObjectInDatabase(Item item)
+    public ItemObject FindObjectInDatabase(Item item)
     {
         return Database.GetItemByID[item.ID];
     }
@@ -418,6 +420,7 @@ public class Container : MonoBehaviour
         {
             RemoveEquipment(equipmentItem);
             Inventory[FindItemArrayPositionInventory(inventoryItem)] = equipmentItem;
+            EquipmentUpdated?.Invoke();
             ContainerUpdated?.Invoke();
             return;
         }
@@ -426,6 +429,7 @@ public class Container : MonoBehaviour
         {
             SetEquipment(inventoryItem);
             Inventory[FindItemArrayPositionInventory(inventoryItem)] = new Item();
+            EquipmentUpdated?.Invoke();
             ContainerUpdated?.Invoke();
             return;
         }
@@ -433,7 +437,8 @@ public class Container : MonoBehaviour
 
         SetEquipment(inventoryItem);
         Inventory[FindItemArrayPositionInventory(inventoryItem)] = equipmentItem;
-
+        
+        EquipmentUpdated?.Invoke();
         ContainerUpdated?.Invoke();
     }
 
@@ -567,7 +572,7 @@ public class Container : MonoBehaviour
         return true;
     }
 
-    private void CraftItem()
+    public void CraftItem()
     {
         for (int i = 0; i < Database.CraftObjects.Length; i++)
         {

@@ -107,7 +107,6 @@ public class ItemSlot : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     //Отжатие кнопки для UI
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("123");
         canvasGroup.blocksRaycasts = true;
         Destroy(MouseData.Icon);
         if (eventData.pointerEnter == null)

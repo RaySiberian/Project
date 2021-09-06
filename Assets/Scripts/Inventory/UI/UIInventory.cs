@@ -227,7 +227,6 @@ public class UIInventory : MonoBehaviour
         }
 
         itemSlot.InventoryCellIcon.sprite = empty;
-
     }
 
     private bool CheckForReturn(Item fromSlot, Item toSlot)
