@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class WorldItem : MonoBehaviour
@@ -6,6 +7,10 @@ public class WorldItem : MonoBehaviour
     public int ItemId;
     public int Amount;
     public string Name;
+
+    public float shakeDuration;
+    public float shakeStrength;
+    
     
     public int AmountMultiplayerByDurability;
     public int Durability = 5;
@@ -17,6 +22,12 @@ public class WorldItem : MonoBehaviour
         Amount = Durability * AmountMultiplayerByDurability;
     }
 
+    private void StartShakeAnimation()
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(transform.DOShakePosition(shakeDuration,shakeStrength));
+    }
+    
     public int GiveResources()
     {
         int returnNumber = Amount / Durability;
@@ -25,7 +36,9 @@ public class WorldItem : MonoBehaviour
         if (Durability == 0)
         {
             Destroy(gameObject);
+            return returnNumber;
         }
+        StartShakeAnimation();
         return returnNumber;
     }
 }

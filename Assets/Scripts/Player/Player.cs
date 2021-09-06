@@ -2,10 +2,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private GameObject rightHandItem ;
-    private GameObject leftHandItem ;
+    private GameObject rightHandItem;
+    private GameObject leftHandItem;
     private float rayCastRange = 5f;
-    
+    private Container inventory;
+    [SerializeField] private GameObject InventoryPanels;
+
+
     public Transform rightHandTransform;
     public Transform leftHandShieldTransform;
     public Camera mainCamera;
@@ -13,24 +16,38 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
+        inventory = GetComponent<Container>();
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Shot();
+            PlayerHit();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            HideInventory();
         }
     }
-    
-    private void Shot()
+
+    private void HideInventory()
+    {
+        //TODO баг с инвенторем при отключении
+        InventoryPanels.SetActive(!InventoryPanels.activeSelf);
+    }
+
+    private void PlayerHit()
     {
         RaycastHit hit;
-        if (Physics.Raycast(mainCamera.transform.position,mainCamera.transform.forward,out hit,rayCastRange))
+        if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, rayCastRange))
         {
             if (hit.collider.CompareTag("Resources"))
             {
-                Debug.Log("Ресурсы");
+                WorldItem worldItem = hit.collider.gameObject.GetComponent<WorldItem>();
+                Item item = new Item(worldItem.ItemId, worldItem.Name,  worldItem.GiveResources());
+                inventory.AddItemInInventory(item);
             }
         }
     }
@@ -46,5 +63,4 @@ public class Player : MonoBehaviour
     //         }
     //     }
     // }
-
 }

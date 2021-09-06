@@ -11,8 +11,13 @@ public class Item
         Name = itemObject.name;
         Amount = 1;
     }
-    
-    //TODO Добавить конструктор с WorldItem
+
+    public Item(int id, string name, int amount)
+    {
+        ID = id;
+        Name = name;
+        Amount = amount;
+    }
     
     public Item()
     {
