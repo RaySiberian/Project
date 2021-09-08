@@ -2,21 +2,18 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-  
-
-    // private GameObject rightHandItem;
-    // private GameObject leftHandItem;
-    // public Transform rightHandTransform;
-    // public Transform leftHandShieldTransform;
-
+    public GameObject WeaponHandlerGameObject;
+    
     public float MineCastRange = 5f;
     public float MineMultiply = 1f;
     public float AttackRange = 5f;
     public float Attack = 1f;
 
+    private GameObject weapon;
     private Container inventory;
+    private UIInventory uiInventory;
     private Camera mainCamera;
-    public Animator animator;
+    private Animator animator;
     [SerializeField] private GameObject InventoryPanels;
     
     private float mineCastRangeBuff = 0f;
@@ -27,16 +24,21 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         inventory.ContainerUpdated += UpdateBuffsData;
+        inventory.WeaponSet += SetWeapon;
+        inventory.WeaponRemoved += RemoveWeapon;
     }
 
     private void OnDisable()
     {
         inventory.ContainerUpdated -= UpdateBuffsData;
+        inventory.WeaponSet -= SetWeapon;
+        inventory.WeaponRemoved -= RemoveWeapon;
     }
 
     private void Awake()
     {
         mainCamera = Camera.main;
+        uiInventory = FindObjectOfType<UIInventory>();
         inventory = GetComponent<Container>();
         animator = GetComponentInChildren<Animator>();
     }
@@ -52,6 +54,17 @@ public class Player : MonoBehaviour
         {
             HideInventory();
         }
+    }
+
+    private void SetWeapon(GameObject itemWorldPrefab)
+    {
+        //GameObject prefab = inventory.FindObjectInDatabase(weapon).WorldPrefab;
+        weapon = Instantiate(itemWorldPrefab, WeaponHandlerGameObject.transform);
+    }
+
+    private void RemoveWeapon()
+    {
+        Destroy(weapon);
     }
     
     //TODO можно улучшить удаляя конкретный баф, не проходясь через весь массив
@@ -110,7 +123,6 @@ public class Player : MonoBehaviour
 
     private void HideInventory()
     {
-        //TODO баг с инвенторем при отключении
         InventoryPanels.SetActive(!InventoryPanels.activeSelf);
     }
 
@@ -127,16 +139,5 @@ public class Player : MonoBehaviour
             }
         }
     }
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     var item = other.GetComponent<GroundItem>();
-    //     if (item)
-    //     {
-    //         Item _item = new Item(item.item);
-    //         if (Inventory.AddItem(_item, 1))
-    //         {
-    //             Destroy(other.gameObject);
-    //         }
-    //     }
-    // }
+    
 }

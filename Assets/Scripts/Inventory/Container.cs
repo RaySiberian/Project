@@ -20,6 +20,8 @@ public class Container : MonoBehaviour
     public Item[] CraftStorage = new Item[9];
     public event Action ContainerUpdated;
     public event Action EquipmentUpdated;
+    public event Action<GameObject> WeaponSet;
+    public event Action WeaponRemoved;
     public int FreeSlots
     {
         get { return Inventory.Count(t => t.ID == -1); }
@@ -30,7 +32,7 @@ public class Container : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F1))
         {
             AddItemInInventory(test1);
-            AddItemInInventory(test);
+            AddItemInInventory(test2);
             AddItemInInventory(test3);
         }
 
@@ -371,12 +373,12 @@ public class Container : MonoBehaviour
         {
             EquipmentType.Head => 0,
             EquipmentType.Torso => 1,
-            EquipmentType.Lags => 2,
-            EquipmentType.Feet => 3,
-            EquipmentType.Hands => 4,
+            EquipmentType.Hands => 2,
+            EquipmentType.Neck => 3,
+            EquipmentType.Lags => 4,
             EquipmentType.Fingers => 5,
-            EquipmentType.Neck => 6,
-            EquipmentType.Weapon => 7,
+            EquipmentType.Weapon => 6,
+            EquipmentType.Feet => 7,
             EquipmentType.Shield => 8,
             _ => -1
         };
@@ -398,7 +400,6 @@ public class Container : MonoBehaviour
     {
         Item inventoryItem;
         Item equipmentItem;
-        Item empty = new Item();
         //Если содержится, значит item1 - объект из инвентаря
         if (IsItemContainsInInventory(item1))
         {
@@ -414,6 +415,10 @@ public class Container : MonoBehaviour
         if (Item.IsEmpty(inventoryItem))
         {
             RemoveEquipment(equipmentItem);
+            if (FindObjectInDatabase(equipmentItem) is EquipmentObject { EquipmentType: EquipmentType.Weapon })
+            {
+                WeaponRemoved?.Invoke();
+            }
             Inventory[FindItemArrayPositionInventory(inventoryItem)] = equipmentItem;
             EquipmentUpdated?.Invoke();
             ContainerUpdated?.Invoke();
@@ -423,6 +428,10 @@ public class Container : MonoBehaviour
         if (Item.IsEmpty(equipmentItem))
         {
             SetEquipment(inventoryItem);
+            if (FindObjectInDatabase(inventoryItem) is EquipmentObject { EquipmentType: EquipmentType.Weapon })
+            {
+                WeaponSet?.Invoke(FindObjectInDatabase(inventoryItem).WorldPrefab);
+            }
             Inventory[FindItemArrayPositionInventory(inventoryItem)] = new Item();
             EquipmentUpdated?.Invoke();
             ContainerUpdated?.Invoke();
