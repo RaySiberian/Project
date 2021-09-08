@@ -34,11 +34,6 @@ public class Container : MonoBehaviour
             AddItemInInventory(test3);
         }
 
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            SetEquipment(test1.Data);
-        }
-
         if (Input.GetKeyDown(KeyCode.F3))
         {
             CraftItem();

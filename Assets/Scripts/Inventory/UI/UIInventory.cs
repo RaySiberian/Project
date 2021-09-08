@@ -10,9 +10,35 @@ public class UIInventory : MonoBehaviour
     public ItemSlot[] InventorySlots;
     public ItemSlot[] EquipmentSlots;
     public ItemSlot[] CraftingSlots;
+
+    private bool isCellsCreated = false;
+    
     private void OnEnable()
     {
-        playerContainer.ContainerUpdated += UpdateCellsData;
+        if (isCellsCreated)
+        {
+            foreach (var slot in InventorySlots)
+            {
+                slot.ItemNeedSwap += SwapItemOnInterface;
+                slot.ItemRemoved += RemoveItemInContainer;
+                slot.ItemSwapInEquipment += SetItemsToEquipment;
+                slot.ItemSwapInCraft += SwapItemToCraft;
+            }
+
+            foreach (var slot in EquipmentSlots)
+            {
+                slot.ItemSwapInEquipment += SetItemsToEquipment;
+                slot.ItemRemoved += RemoveItemInContainer;
+            }
+        
+            foreach (var slot in CraftingSlots)
+            {
+                slot.ItemSwapInCraft += SwapItemToCraft;
+            }
+        
+            playerContainer.ContainerUpdated += UpdateCellsData;
+        }
+        UpdateCellsData();
     }
 
     private void OnDisable()
@@ -44,14 +70,8 @@ public class UIInventory : MonoBehaviour
         InventoryCellsCount = playerContainer.Inventory.Length;
         InventorySlots = new ItemSlot[InventoryCellsCount];
         CreateInventoryCells();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            UpdateCellsData();
-        }
+        playerContainer.ContainerUpdated += UpdateCellsData;
+        isCellsCreated = true;
     }
 
     private void CreateInventoryCells()

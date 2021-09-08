@@ -1,11 +1,8 @@
-using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private Container inventory;
-    private Camera mainCamera;
-    [SerializeField] private GameObject InventoryPanels;
+  
 
     // private GameObject rightHandItem;
     // private GameObject leftHandItem;
@@ -17,6 +14,11 @@ public class Player : MonoBehaviour
     public float AttackRange = 5f;
     public float Attack = 1f;
 
+    private Container inventory;
+    private Camera mainCamera;
+    public Animator animator;
+    [SerializeField] private GameObject InventoryPanels;
+    
     private float mineCastRangeBuff = 0f;
     private float mineMultiplyBuff = 0f;
     private float attackRangeBuff = 0f;
@@ -36,8 +38,22 @@ public class Player : MonoBehaviour
     {
         mainCamera = Camera.main;
         inventory = GetComponent<Container>();
+        animator = GetComponentInChildren<Animator>();
     }
+    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            animator.SetTrigger("Hit");
+        }
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            HideInventory();
+        }
+    }
+    
     //TODO можно улучшить удаляя конкретный баф, не проходясь через весь массив
     private void UpdateBuffsData()
     {
@@ -91,23 +107,6 @@ public class Player : MonoBehaviour
         AttackRange += attackRangeBuff;
         Attack += attackBuff;
     }
-    
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            PlayerHit();
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            UpdateBuffsData();
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            MineCastRange = 5;
-        }
-    }
 
     private void HideInventory()
     {
@@ -115,7 +114,7 @@ public class Player : MonoBehaviour
         InventoryPanels.SetActive(!InventoryPanels.activeSelf);
     }
 
-    private void PlayerHit()
+    public void PlayerHit()
     {
         RaycastHit hit;
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, MineCastRange))
