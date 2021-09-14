@@ -1,17 +1,19 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public event Action InventoryOpen;
+    
     public GameObject WeaponHandlerGameObject;
     
     public float MineCastRange = 5f;
     public float MineMultiply = 1f;
     public float AttackRange = 5f;
     public float Attack = 1f;
-
+    
     private GameObject weapon;
     private Container inventory;
-    private UIInventory uiInventory;
     private Camera mainCamera;
     private Animator animator;
     [SerializeField] private GameObject InventoryPanels;
@@ -21,6 +23,8 @@ public class Player : MonoBehaviour
     private float attackRangeBuff = 0f;
     private float attackBuff = 0f;
 
+    private bool isInventoryOpen;
+    
     private void OnEnable()
     {
         inventory.ContainerUpdated += UpdateBuffsData;
@@ -38,14 +42,18 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
-        uiInventory = FindObjectOfType<UIInventory>();
         inventory = GetComponent<Container>();
         animator = GetComponentInChildren<Animator>();
     }
-    
+
+    private void Start()
+    {
+        isInventoryOpen = InventoryPanels.activeSelf;
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !isInventoryOpen)
         {
             animator.SetTrigger("Hit");
         }
@@ -124,6 +132,8 @@ public class Player : MonoBehaviour
     private void HideInventory()
     {
         InventoryPanels.SetActive(!InventoryPanels.activeSelf);
+        isInventoryOpen = InventoryPanels.activeSelf;
+        InventoryOpen?.Invoke();
     }
 
     public void PlayerHit()

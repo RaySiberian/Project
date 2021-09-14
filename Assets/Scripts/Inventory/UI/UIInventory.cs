@@ -6,6 +6,7 @@ public class UIInventory : MonoBehaviour
     [SerializeField] private GameObject inventoryCellPrefab;
     [SerializeField] private Container playerContainer;
     [SerializeField] private Sprite empty;
+    [SerializeField] private Player player;
     public int InventoryCellsCount;
     public ItemSlot[] InventorySlots;
     public ItemSlot[] EquipmentSlots;
@@ -35,7 +36,8 @@ public class UIInventory : MonoBehaviour
             {
                 slot.ItemSwapInCraft += SwapItemToCraft;
             }
-        
+
+            player.InventoryOpen += UpdateCellsData;
             playerContainer.ContainerUpdated += UpdateCellsData;
         }
         UpdateCellsData();
@@ -62,6 +64,7 @@ public class UIInventory : MonoBehaviour
             slot.ItemSwapInCraft -= SwapItemToCraft;
         }
         
+        player.InventoryOpen -= UpdateCellsData;
         playerContainer.ContainerUpdated -= UpdateCellsData;
     }
     
@@ -71,6 +74,7 @@ public class UIInventory : MonoBehaviour
         InventorySlots = new ItemSlot[InventoryCellsCount];
         CreateInventoryCells();
         playerContainer.ContainerUpdated += UpdateCellsData;
+        player.InventoryOpen += UpdateCellsData;
         isCellsCreated = true;
     }
 

@@ -8,15 +8,18 @@ public class WorldItem : MonoBehaviour
     public int Amount;
     public string Name;
 
-    public float shakeDuration;
-    public float shakeStrength;
+    private float shakeDuration = 0.3f;
+    private float shakeStrength = 0.3f;
     
-    
+    //Количество ресурса за удар
     public int AmountMultiplayerByDurability;
-    public int Durability = 5;
+    //Количестве ударов
+    public int Durability;
 
     private void Start()
     {
+        AmountMultiplayerByDurability = Random.Range(3,7);
+        Durability = Random.Range(1,5);
         ItemId = worldItemObject.Data.ID;
         Name = worldItemObject.Data.Name;
         Amount = Durability * AmountMultiplayerByDurability;
