@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TerrainSpawn : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class TerrainSpawn : MonoBehaviour
     private MeshRenderer meshRenderer;
     private MeshFilter meshFilter;
     private MeshCollider meshCollider;
+    private NavMeshSurface navMeshSurface;
     private float[,] falloffMap;
     public static event Action TerrainSpawned;
     
@@ -30,6 +32,7 @@ public class TerrainSpawn : MonoBehaviour
         Instantiate(meshGameObject);
         meshRenderer = meshGameObject.AddComponent<MeshRenderer>();
         meshFilter = meshGameObject.AddComponent<MeshFilter>();
+        navMeshSurface = meshGameObject.AddComponent<NavMeshSurface>();
         MapData mapData = GenerateMapData();
         DrawMesh(
             MeshGenerator.GenerateTerrainMesh(mapData.heightMap, terrainData.meshHeightMultiplier,
@@ -37,6 +40,7 @@ public class TerrainSpawn : MonoBehaviour
         meshCollider = meshGameObject.AddComponent<MeshCollider>();
         meshGameObject.transform.position = new Vector3(600, 0, 600);
         meshGameObject.transform.localScale = new Vector3(5, 1, 5);
+        //navMeshSurface.BuildNavMesh();
         TerrainSpawned?.Invoke();
     }
 

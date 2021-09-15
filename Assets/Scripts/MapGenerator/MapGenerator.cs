@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class MapGenerator : MonoBehaviour
 
     private void OnTextureValuesUpdated()
     {
+        Debug.Log("123");
         textureData.ApplyToMaterial(terrainMaterial);
     }
 
@@ -85,11 +87,11 @@ public class MapGenerator : MonoBehaviour
 
         
         textureData.UpdateMeshHeights(terrainMaterial, terrainData.minHeight, terrainData.maxHeight);
-        
+
         return new MapData(noiseMap);
     }
 
-    private void OnValidate()
+    private void OnEnable()
     {
         if (terrainData != null)
         {
@@ -108,6 +110,16 @@ public class MapGenerator : MonoBehaviour
             textureData.OnValuesUpdated -= OnTextureValuesUpdated;
             textureData.OnValuesUpdated += OnTextureValuesUpdated;
         }
+    }
+
+    private void Start()
+    {
+        textureData.NotifyOfUpdatedValues();
+    }
+
+    private void OnValidate()
+    {
+       
     }
 }
 

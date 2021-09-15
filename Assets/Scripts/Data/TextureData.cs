@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using UnityEngine;
 
@@ -26,7 +25,8 @@ public class TextureData : UpdateableData
 
         UpdateMeshHeights(material, savedMinHeight, savedMaxHeight);
     }
-
+    
+    
     public void UpdateMeshHeights(Material material, float minHeight, float maxHeight)
     {
         savedMinHeight = minHeight;

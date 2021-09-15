@@ -11,18 +11,18 @@ public class NoiseData : UpdateableData
     public int seed;
     public Vector2 offset;
 
-    protected override void OnValidate()
+    protected override void OnEnable()
     {
         if (lacunarity < 1)
         {
             lacunarity = 1;
         }
-
+    
         if (octaves < 0)
         {
             octaves = 0;
         }
         
-        base.OnValidate();
+        base.OnEnable();
     }
 }

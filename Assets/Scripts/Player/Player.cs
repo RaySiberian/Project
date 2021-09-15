@@ -12,6 +12,11 @@ public class Player : MonoBehaviour
     public float AttackRange = 5f;
     public float Attack = 1f;
     
+    public GameObject prefabModel1;
+    public GameObject prefabModel2;
+
+    private GameObject currentModel;
+    
     private GameObject weapon;
     private Container inventory;
     private Camera mainCamera;
