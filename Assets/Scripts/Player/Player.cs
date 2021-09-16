@@ -12,11 +12,6 @@ public class Player : MonoBehaviour
     public float AttackRange = 5f;
     public float Attack = 1f;
     
-    public GameObject prefabModel1;
-    public GameObject prefabModel2;
-
-    private GameObject currentModel;
-    
     private GameObject weapon;
     private Container inventory;
     private Camera mainCamera;
@@ -72,6 +67,7 @@ public class Player : MonoBehaviour
     private void SetWeapon(GameObject itemWorldPrefab)
     {
         //GameObject prefab = inventory.FindObjectInDatabase(weapon).WorldPrefab;
+        Debug.Log("123");
         weapon = Instantiate(itemWorldPrefab, WeaponHandlerGameObject.transform);
     }
 

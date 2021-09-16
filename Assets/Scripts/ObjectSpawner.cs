@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class ObjectSpawner : MonoBehaviour
 {
-    // Регулирование количество зон ставна
+    // Регулирование количество зон спавна
     // Число меньше - зон больше
     public int objectNoiseScale;
     public int grassNoiseScale;
@@ -12,25 +13,31 @@ public class ObjectSpawner : MonoBehaviour
 
     public ObjectSpawnArea[] objectSpawnAreas = new ObjectSpawnArea[] { };
     public ObjectSpawnArea[] grassSpawnAreas = new ObjectSpawnArea[] { };
-   
+
+    public static event Action ObjectSpawned;
     private void OnEnable()
     {
-        //TerrainSpawn.TerrainSpawned += SpawnObjects;
-        //TerrainSpawn.TerrainSpawned += SpawnGrass;
+        TerrainSpawn.TerrainSpawned += SpawnObjects;
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            SpawnObjects();
-        }
+        TerrainSpawn.TerrainSpawned -= SpawnObjects;
     }
+
+    // private void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.F1))
+    //     {
+    //         SpawnObjects();
+    //     }
+    // }
 
     private void SpawnObjects()
     {
         Spawn(objectSpawnAreas,objectNoiseScale,0.9f, new Vector3(3,3,3));
-        Spawn(grassSpawnAreas,grassNoiseScale,0.95f, new Vector3(1,1,1));
+        Spawn(grassSpawnAreas, grassNoiseScale,0.8f, new Vector3(2,2,2));
+        ObjectSpawned?.Invoke();
     }
 
     private void Spawn(ObjectSpawnArea[] objectSpawnArea, float noiseScale, float intensity, Vector3 localScale)
@@ -50,6 +57,11 @@ public class ObjectSpawner : MonoBehaviour
                     {
                         foreach (var area in objectSpawnArea)
                         {
+                            if (!hit.collider.gameObject.CompareTag("Ground"))
+                            {
+                                continue;
+                            }
+                            
                             if (hit.point.y >= area.minY && hit.point.y <= area.maxY)
                             {
                                 int prefabID = Random.Range(0, area.prefabs.Length);

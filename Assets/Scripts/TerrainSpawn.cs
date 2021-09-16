@@ -19,7 +19,12 @@ public class TerrainSpawn : MonoBehaviour
     private NavMeshSurface navMeshSurface;
     private float[,] falloffMap;
     public static event Action TerrainSpawned;
-    
+
+    private void OnEnable()
+    {
+        //ObjectSpawner.ObjectSpawned += () => navMeshSurface.BuildNavMesh();
+    }
+
     private void Awake()
     {
         falloffMap = FalloffGenerator.GenerateFalloffMap(mapChunkSize);
@@ -28,6 +33,7 @@ public class TerrainSpawn : MonoBehaviour
     private void Start()
     {
         meshGameObject = new GameObject("Terrain");
+        meshGameObject.tag = "Ground";
         meshGameObject.layer = LayerMask.NameToLayer("Obsticle");
         Instantiate(meshGameObject);
         meshRenderer = meshGameObject.AddComponent<MeshRenderer>();
@@ -40,9 +46,9 @@ public class TerrainSpawn : MonoBehaviour
         meshCollider = meshGameObject.AddComponent<MeshCollider>();
         meshGameObject.transform.position = new Vector3(600, 0, 600);
         meshGameObject.transform.localScale = new Vector3(5, 1, 5);
-        //navMeshSurface.BuildNavMesh();
         TerrainSpawned?.Invoke();
     }
+    
 
     private void DrawMesh(MeshData meshData)
     {

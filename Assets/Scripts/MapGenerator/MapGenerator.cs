@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -34,7 +33,6 @@ public class MapGenerator : MonoBehaviour
 
     private void OnTextureValuesUpdated()
     {
-        Debug.Log("123");
         textureData.ApplyToMaterial(terrainMaterial);
     }
 
@@ -115,11 +113,6 @@ public class MapGenerator : MonoBehaviour
     private void Start()
     {
         textureData.NotifyOfUpdatedValues();
-    }
-
-    private void OnValidate()
-    {
-       
     }
 }
 

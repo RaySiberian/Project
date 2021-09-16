@@ -398,6 +398,7 @@ public class Container : MonoBehaviour
 
     public void SwapItemsInInventoryEquipment(Item item1, Item item2)
     {
+        Debug.Log("321");
         Item inventoryItem;
         Item equipmentItem;
         //Если содержится, значит item1 - объект из инвентаря
@@ -415,7 +416,7 @@ public class Container : MonoBehaviour
         if (Item.IsEmpty(inventoryItem))
         {
             RemoveEquipment(equipmentItem);
-            if (FindObjectInDatabase(equipmentItem) is EquipmentObject { EquipmentType: EquipmentType.Weapon })
+            if (FindObjectInDatabase(equipmentItem) is EquipmentObject { EquipmentType: EquipmentType.Hands })
             {
                 WeaponRemoved?.Invoke();
             }
@@ -428,7 +429,7 @@ public class Container : MonoBehaviour
         if (Item.IsEmpty(equipmentItem))
         {
             SetEquipment(inventoryItem);
-            if (FindObjectInDatabase(inventoryItem) is EquipmentObject { EquipmentType: EquipmentType.Weapon })
+            if (FindObjectInDatabase(inventoryItem) is EquipmentObject { EquipmentType: EquipmentType.Hands })
             {
                 WeaponSet?.Invoke(FindObjectInDatabase(inventoryItem).WorldPrefab);
             }
