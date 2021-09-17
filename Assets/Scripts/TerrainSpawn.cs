@@ -22,7 +22,7 @@ public class TerrainSpawn : MonoBehaviour
 
     private void OnEnable()
     {
-        //ObjectSpawner.ObjectSpawned += () => navMeshSurface.BuildNavMesh();
+        ObjectSpawner.ObjectSpawned += () => navMeshSurface.BuildNavMesh();
     }
 
     private void Awake()

@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class ObjectSpawner : MonoBehaviour
@@ -10,7 +12,8 @@ public class ObjectSpawner : MonoBehaviour
     public int grassNoiseScale;
     public int seed;
     private int raycastDistance = 100;
-
+    
+    public Text FPSText;
     public ObjectSpawnArea[] objectSpawnAreas = new ObjectSpawnArea[] { };
     public ObjectSpawnArea[] grassSpawnAreas = new ObjectSpawnArea[] { };
 
@@ -24,23 +27,30 @@ public class ObjectSpawner : MonoBehaviour
     {
         TerrainSpawn.TerrainSpawned -= SpawnObjects;
     }
+    
+    private void SpawnObjects()
+    {
+        GameObject obsticalsParentObject = new GameObject();
+        obsticalsParentObject.name = "Obsticals";
+        GameObject grassParentObject = new GameObject();
+        grassParentObject.name = "Grass";
+        MeshCombiner meshCombiner = grassParentObject.AddComponent<MeshCombiner>();
+        NavMeshObstacle navMeshObstacle = grassParentObject.AddComponent<NavMeshObstacle>();
+        Spawn(objectSpawnAreas,objectNoiseScale,0.9f, new Vector3(3,3,3), obsticalsParentObject);
+        Spawn(grassSpawnAreas, grassNoiseScale,0.8f, new Vector3(2,2,2), grassParentObject);
+        meshCombiner.DestroyCombinedChildren = true;
+        meshCombiner.CombineMeshes(true);
+        
+        //ObjectSpawned?.Invoke();
+    }
 
     // private void Update()
     // {
-    //     if (Input.GetKeyDown(KeyCode.F1))
-    //     {
-    //         SpawnObjects();
-    //     }
+    //     int FPS = (int)(1f / Time.unscaledDeltaTime);
+    //     FPSText.text = FPS.ToString();
     // }
 
-    private void SpawnObjects()
-    {
-        Spawn(objectSpawnAreas,objectNoiseScale,0.9f, new Vector3(3,3,3));
-        Spawn(grassSpawnAreas, grassNoiseScale,0.8f, new Vector3(2,2,2));
-        ObjectSpawned?.Invoke();
-    }
-
-    private void Spawn(ObjectSpawnArea[] objectSpawnArea, float noiseScale, float intensity, Vector3 localScale)
+    private void Spawn(ObjectSpawnArea[] objectSpawnArea, float noiseScale, float intensity, Vector3 localScale, GameObject parent)
     {
         for (int x = 0; x < 1200; x++)
         {
@@ -70,7 +80,7 @@ public class ObjectSpawner : MonoBehaviour
                                 go.transform.localScale = localScale;
                                 
                                 Instantiate(go, new Vector3(x, hit.point.y, z),
-                                    Quaternion.FromToRotation (transform.up, hit.normal) * transform.rotation);
+                                    Quaternion.FromToRotation (transform.up, hit.normal) * transform.rotation, parent.transform);
                             }
                         }
                     }

@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
     private float attackBuff = 0f;
 
     private bool isInventoryOpen;
-    
+
     private void OnEnable()
     {
         inventory.ContainerUpdated += UpdateBuffsData;
