@@ -41,6 +41,7 @@ public class ObjectSpawner : MonoBehaviour
         meshCombiner.DestroyCombinedChildren = true;
         meshCombiner.CombineMeshes(true);
         
+        
         //ObjectSpawned?.Invoke();
     }
 

@@ -3,8 +3,12 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-   public float lookRadius = 15f;
-   public float attackDistance;
+   public float Damage;
+   public float Heath;
+   public float LookRadius = 15f;
+   //public float attackDistance;
+
+   private Player player;
    private Transform target;
    private NavMeshAgent navMeshAgent;
    private Animator animator;
@@ -17,6 +21,7 @@ public class Enemy : MonoBehaviour
 
    private void Start()
    {
+      player = PlayerManager.instance.player.GetComponent<Player>();
       target = PlayerManager.instance.player.transform;
    }
 
@@ -27,12 +32,11 @@ public class Enemy : MonoBehaviour
          animator.SetBool("jump",true);
       }
       float distance = Vector3.Distance(target.position, transform.position);
-      if (distance <= lookRadius)
+      if (distance <= LookRadius)
       {
          navMeshAgent.SetDestination(target.position);
          if (distance <= navMeshAgent.stoppingDistance + 0.5f)
          {
-            //TODO реализовать атаку
             animator.SetTrigger("jump");
             FaceTarget();
          }
@@ -48,6 +52,21 @@ public class Enemy : MonoBehaviour
       }
    }
 
+   public void DealDamage()
+   {
+      player.Health -= Damage;
+      player.HealthBarFill();
+   }
+
+   public void GetDamage(float incomeDamage)
+   {
+      Heath -= incomeDamage;
+      if (Heath <= 0)
+      {
+         Destroy(gameObject);
+      }
+   }
+   
    private void FaceTarget()
    {
       Vector3 direction = (target.position - transform.position).normalized;
@@ -58,6 +77,6 @@ public class Enemy : MonoBehaviour
    private void OnDrawGizmosSelected()
    {
       Gizmos.color = Color.red;
-      Gizmos.DrawWireSphere(transform.position,lookRadius);
+      Gizmos.DrawWireSphere(transform.position,LookRadius);
    }
 }

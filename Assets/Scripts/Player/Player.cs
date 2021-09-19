@@ -1,23 +1,28 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     public event Action InventoryOpen;
     
     public GameObject WeaponHandlerGameObject;
+    public Image HealthBar;
     
-    public float MineCastRange = 5f;
-    public float MineMultiply = 1f;
-    public float AttackRange = 5f;
-    public float Attack = 1f;
+    public float MineCastRange;
+    public float MineMultiply;
+    public float AttackRange;
+    public float Attack;
+    
+    public float Health { get; set; }
+    private float maxHealth;
     
     private GameObject weapon;
     private Container inventory;
     private Camera mainCamera;
     private Animator animator;
     [SerializeField] private GameObject InventoryPanels;
-    
+
     private float mineCastRangeBuff = 0f;
     private float mineMultiplyBuff = 0f;
     private float attackRangeBuff = 0f;
@@ -49,6 +54,9 @@ public class Player : MonoBehaviour
     private void Start()
     {
         isInventoryOpen = InventoryPanels.activeSelf;
+        HealthBar.color = Color.green;
+        maxHealth = 100;
+        Health = maxHealth;
     }
 
     private void Update()
@@ -67,7 +75,6 @@ public class Player : MonoBehaviour
     private void SetWeapon(GameObject itemWorldPrefab)
     {
         //GameObject prefab = inventory.FindObjectInDatabase(weapon).WorldPrefab;
-        Debug.Log("123");
         weapon = Instantiate(itemWorldPrefab, WeaponHandlerGameObject.transform);
     }
 
@@ -142,13 +149,25 @@ public class Player : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward, out hit, MineCastRange))
         {
+            //TODO тут можно лучше
             if (hit.collider.CompareTag("Resources"))
             {
                 WorldItem worldItem = hit.collider.gameObject.GetComponent<WorldItem>();
                 Item item = new Item(worldItem.ItemId, worldItem.Name, worldItem.GiveResources());
                 inventory.AddItemInInventory(item);
             }
+            else if (hit.collider.CompareTag("Enemy"))
+            {
+                var enemy = hit.collider.gameObject.GetComponent<Enemy>();
+                enemy.GetDamage(Attack);
+            }
         }
     }
-    
+
+    public void HealthBarFill()
+    {
+        HealthBar.fillAmount = Health / maxHealth;
+        Color healthColor = Color.Lerp(Color.red, Color.green, (Health / maxHealth));
+        HealthBar.color = healthColor;
+    }
 }

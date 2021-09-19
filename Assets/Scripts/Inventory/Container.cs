@@ -398,7 +398,6 @@ public class Container : MonoBehaviour
 
     public void SwapItemsInInventoryEquipment(Item item1, Item item2)
     {
-        Debug.Log("321");
         Item inventoryItem;
         Item equipmentItem;
         //Если содержится, значит item1 - объект из инвентаря
