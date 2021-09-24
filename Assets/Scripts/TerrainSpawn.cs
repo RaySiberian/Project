@@ -22,7 +22,12 @@ public class TerrainSpawn : MonoBehaviour
 
     private void OnEnable()
     {
-        ObjectSpawner.ObjectSpawned += () => navMeshSurface.BuildNavMesh();
+        ObjectSpawner.ObjectSpawned += BuildNavMesh;
+    }
+
+    private void OnDisable()
+    {
+        ObjectSpawner.ObjectSpawned -= BuildNavMesh;
     }
 
     private void Awake()
@@ -48,7 +53,11 @@ public class TerrainSpawn : MonoBehaviour
         meshGameObject.transform.localScale = new Vector3(5, 1, 5);
         TerrainSpawned?.Invoke();
     }
-    
+
+    private void BuildNavMesh()
+    {
+        navMeshSurface.BuildNavMesh();
+    }
 
     private void DrawMesh(MeshData meshData)
     {
