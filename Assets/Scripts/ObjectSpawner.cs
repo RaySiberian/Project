@@ -30,7 +30,12 @@ public class ObjectSpawner : MonoBehaviour
     {
         TerrainSpawn.TerrainSpawned -= SpawnObjects;
     }
-    
+
+    private void Start()
+    {
+        seed = SharedData.Seed;
+    }
+
     private void SpawnObjects()
     {
         GameObject obsticalsParentObject = new GameObject();
@@ -43,10 +48,10 @@ public class ObjectSpawner : MonoBehaviour
         Spawn(grassSpawnAreas, grassNoiseScale,0.8f, new Vector3(2,2,2), grassParentObject);
        
         meshCombiner.DestroyCombinedChildren = true;
-        meshCombiner.CombineMeshes(true);
+        //meshCombiner.CombineMeshes(true);
         
-        //ObjectSpawned?.Invoke();
-        //Spawn(enemySpawnAreas,enemyNoiseScale,0.99f, new Vector3(1,1,1));
+        ObjectSpawned?.Invoke();
+        Spawn(enemySpawnAreas,enemyNoiseScale,0.99f, new Vector3(1,1,1));
     }
     
     private void Spawn(ObjectSpawnArea[] objectSpawnArea, float noiseScale, float intensity, Vector3 localScale, GameObject parent)
@@ -132,6 +137,7 @@ public class ObjectSpawner : MonoBehaviour
 [System.Serializable]
 public class ObjectSpawnArea
 {
+    //TODO сюда можно перенести настройку шума
     public string name;
     public float minY;
     public float maxY;

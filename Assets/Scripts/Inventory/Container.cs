@@ -7,6 +7,13 @@ using UnityEngine;
 [Serializable]
 public class Container : MonoBehaviour
 {
+    //TODO Обработка переполнения
+    //TODO Обработка выбрасываний предметов
+    //TODO Обработка создание объекта в мире при выбрасыванни
+    //TODO Обработка переноса предметов между контейнирами
+    //TODO Обработка крафта при полном инвенторе
+    //TODO И, скорее всего, еще десять тыщ механик
+    
     private string savePath;
     public Database Database;
     public SerializableContainer InventoryContainer;

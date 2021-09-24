@@ -3,7 +3,9 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class TerrainSpawn : MonoBehaviour
-{
+{  
+    //TODO сохранения мира
+    
     public NoiseData noiseData;
     public TerrainData terrainData;
 
@@ -34,7 +36,7 @@ public class TerrainSpawn : MonoBehaviour
     {
         falloffMap = FalloffGenerator.GenerateFalloffMap(mapChunkSize);
     }
-
+    
     private void Start()
     {
         meshGameObject = new GameObject("Terrain");
@@ -56,6 +58,7 @@ public class TerrainSpawn : MonoBehaviour
 
     private void BuildNavMesh()
     {
+        //TODO реализовать в другом потоке, если возможно
         navMeshSurface.BuildNavMesh();
     }
 
@@ -67,7 +70,7 @@ public class TerrainSpawn : MonoBehaviour
 
     public MapData GenerateMapData()
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, noiseData.seed, noiseData.noiseScale,
+        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, SharedData.Seed, noiseData.noiseScale,
             noiseData.octaves, noiseData.persistance,
             noiseData.lacunarity, noiseData.offset);
 

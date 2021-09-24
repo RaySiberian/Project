@@ -24,7 +24,9 @@ public class LoadScene : MonoBehaviour
     {
         LoadImage.rectTransform.Rotate(rotateTo * Time.deltaTime);
     }
-
+    
+    //TODO не имеет смысла, т.к. потом загружен на 100% и асинхронка зависает
+    
     // IEnumerator LoadSceneCor()
     // {
     //     yield return new WaitForSeconds(1f);

@@ -4,10 +4,13 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    //TODO система бафов так себе 
+    
     public event Action InventoryOpen;
     
     public GameObject WeaponHandlerGameObject;
     public Image HealthBar;
+    public MouseLook MouseLook;
     
     public float MineCastRange;
     public float MineMultiply;
@@ -53,8 +56,10 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        InventoryPanels.SetActive(false);
         isInventoryOpen = InventoryPanels.activeSelf;
         HealthBar.color = Color.green;
+        Cursor.lockState = CursorLockMode.Locked;
         maxHealth = 100;
         Health = maxHealth;
     }
@@ -140,6 +145,16 @@ public class Player : MonoBehaviour
     private void HideInventory()
     {
         InventoryPanels.SetActive(!InventoryPanels.activeSelf);
+        if (InventoryPanels.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            MouseLook.enabled = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            MouseLook.enabled = true;
+        }
         isInventoryOpen = InventoryPanels.activeSelf;
         InventoryOpen?.Invoke();
     }

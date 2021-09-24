@@ -7,12 +7,6 @@ public class MouseLook : MonoBehaviour
 
     private float xRotation = 0f;
 
-    private void Start()
-    {
-        //TODO Сделать обработку появления мыши 
-        //Cursor.lockState = CursorLockMode.Locked;
-    }
-
     private void Update()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
